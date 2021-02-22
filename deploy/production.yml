@@ -45,7 +45,10 @@ steps:
       customCommand: '--no-git-tag-version version $(SemVer)'
       customRegistry: 'useFeed'
       customFeed: '$(default-feed)'
- 
+  - task: SonarQubeAnalyze@4
+  - task: SonarQubePublish@4
+    inputs:
+      pollingTimeoutSec: '300'
 
   - task: CopyFiles@2
     inputs:
@@ -53,10 +56,6 @@ steps:
       contents: "**"
       targetFolder: $(Build.ArtifactStagingDirectory)/npm
     displayName: "Copy Build"
-  - task: SonarQubeAnalyze@4
-  - task: SonarQubePublish@4
-    inputs:
-      pollingTimeoutSec: '300'
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: "$(Build.ArtifactStagingDirectory)/npm"
